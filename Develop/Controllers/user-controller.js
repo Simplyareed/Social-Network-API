@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const mongoose = require('mongoose');
 
 const UserController = {
   // 1. Get all users
@@ -24,7 +25,9 @@ const UserController = {
 
   // 4. Update user by ID
   updateUserById(req, res) {
-    User.findOneAndUpdate(req.params.id, req.body, { new: true })
+    const objectId = new mongoose.Types.ObjectId(req.params.userId);
+    const filter = { _id : objectId };
+    User.findOneAndUpdate(filter, req.body, { new: true })
       .then(userData => {
         if (!userData) {
           return res.status(404).json({ message: 'User not found' });
